@@ -1,0 +1,2285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monthly Pack Agent - Swapna's Personal Recommendations</title>
+    <style>
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .header h1 {
+            color: #2c3e50;
+            margin: 0;
+            font-size: 2.5em;
+        }
+        .header p {
+            color: #7f8c8d;
+            font-size: 1.2em;
+            margin: 10px 0 0 0;
+        }
+        .instructions {
+            background: #e8f5e8;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid #27ae60;
+        }
+        .recommendations {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+        }
+        .card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        .card-header {
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .card-header h3 {
+            margin: 0;
+            font-size: 1.3em;
+        }
+        .card-buttons {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .card-body {
+            padding: 20px;
+        }
+        .card-body h4 {
+            margin: 0 0 10px 0;
+            color: #2c3e50;
+        }
+        .card-body p {
+            color: #7f8c8d;
+            line-height: 1.6;
+            margin: 10px 0;
+        }
+        .tag {
+            display: inline-block;
+            background: #ecf0f1;
+            color: #2c3e50;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.9em;
+            margin: 5px 5px 5px 0;
+        }
+        .price {
+            color: #27ae60;
+            font-weight: bold;
+        }
+        .rating {
+            color: #f39c12;
+            font-weight: bold;
+        }
+        .refresh-btn, .more-btn, .link-btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 6px 10px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .refresh-btn:hover, .more-btn:hover, .link-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+        .refresh-btn:disabled, .more-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        .link-btn {
+            background: rgba(255,255,255,0.3);
+            margin-top: 10px;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #7f8c8d;
+        }
+        .birthday-message {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
+            color: #2c3e50;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        .month-indicator {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 1.1em;
+            font-weight: bold;
+            margin: 10px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎁 Monthly Pack Agent</h1>
+            <div class="month-indicator" id="month-indicator">Loading...</div>
+            <p>Personalized recommendations for Swapna</p>
+            <div class="birthday-message">
+                <h2>🎂 Happy Birthday Mumma! 🎉</h2>
+                <p>Your personal AI recommendation system with fresh monthly packs!</p>
+            </div>
+            <div class="instructions">
+                <strong>✨ How to use:</strong> Each month brings a new curated pack! Click "🔄 Refresh" for different options within this month, or "📋 3 Options" to see all choices. Use "🔗 Find This" to go directly to content!
+            </div>
+        </div>
+        
+        <div class="recommendations" id="recommendations">
+            <!-- Cards will be generated by JavaScript -->
+        </div>
+        
+        <div class="footer">
+            <p>Generated on <span id="current-date"></span></p>
+            <p>💝 Made with love for Mumma's birthday</p>
+            <p>🔗 <a href="https://github.com/yourusername/swapna-monthly-pack" style="color: #667eea;">View on GitHub</a></p>
+        </div>
+    </div>
+
+    <script>
+        // Swapna's preferences
+        const userPreferences = {
+            name: "Swapna (Mom)",
+            age: 45,
+            ethnicity: "Indian (Marathi)",
+            location: "Cupertino, California",
+            interests: ["Yoga", "Meditation", "Hiking", "Dancing", "Singing", "Family time"]
+        };
+
+        // Monthly recommendation packs - each month has 3-4 curated options per category
+        const monthlyPacks = {
+            1: { // January
+                entertainment: [
+                    {
+                        title: "Heartstopper",
+                        description: "Sweet coming-of-age romance series with heart and authenticity",
+                        rating: 8.8,
+                        type: "tv",
+                        link: "https://www.google.com/search?q=Heartstopper+Netflix+watch"
+                    },
+                    {
+                        title: "Never Have I Ever",
+                        description: "Coming-of-age comedy-drama about a first-generation Indian American",
+                        rating: 7.8,
+                        type: "tv",
+                        link: "https://www.google.com/search?q=Never+Have+I+Ever+Netflix"
+                    },
+                    {
+                        title: "Little Women (2019)",
+                        description: "Beautiful adaptation with strong sisterhood themes",
+                        rating: 8.0,
+                        type: "movie",
+                        link: "https://www.google.com/search?q=Little+Women+2019+movie+stream"
+                    }
+                ],
+                book: [
+                    {
+                        title: "Atomic Habits",
+                        author: "James Clear",
+                        description: "Life-changing guide to building good habits and breaking bad ones",
+                        rating: 4.6,
+                        link: "https://www.amazon.com/s?k=Atomic+Habits+James+Clear"
+                    },
+                    {
+                        title: "The Seven Husbands of Evelyn Hugo",
+                        author: "Taylor Jenkins Reid",
+                        description: "Captivating novel about love, ambition, and secrets",
+                        rating: 4.5,
+                        link: "https://www.amazon.com/s?k=Seven+Husbands+Evelyn+Hugo"
+                    },
+                    {
+                        title: "Braiding Sweetgrass",
+                        author: "Robin Wall Kimmerer",
+                        description: "Indigenous wisdom, scientific knowledge, and teachings of plants",
+                        rating: 4.7,
+                        link: "https://www.amazon.com/s?k=Braiding+Sweetgrass+Robin+Kimmerer"
+                    }
+                ],
+                podcast: [
+                    {
+                        title: "The Daily Meditation Podcast",
+                        creator: "Mary Meckley",
+                        description: "Daily guided meditations for busy people",
+                        link: "https://podcasts.apple.com/us/podcast/the-daily-meditation-podcast/id1508392842"
+                    },
+                    {
+                        title: "Terrible, Thanks for Asking",
+                        creator: "Nora McInerny",
+                        description: "Real conversations about grief, loss, and being human",
+                        link: "https://podcasts.apple.com/us/podcast/terrible-thanks-for-asking/id1126119288"
+                    },
+                    {
+                        title: "Yoga Girl",
+                        creator: "Rachel Brathen",
+                        description: "Yoga, meditation, and mindful living conversations",
+                        link: "https://podcasts.apple.com/us/podcast/yoga-girl/id1032143097"
+                    }
+                ],
+                wine: [
+                    {
+                        name: "Catena Malbec",
+                        type: "Malbec",
+                        region: "Argentina",
+                        price_range: "$15-25",
+                        description: "Rich, full-bodied with dark fruit flavors",
+                        where_to_buy: "Total Wine, BevMo",
+                        link: "https://www.google.com/search?q=Catena+Malbec+buy+online"
+                    },
+                    {
+                        name: "Bogle Cabernet Sauvignon",
+                        type: "Cabernet Sauvignon",
+                        region: "California",
+                        price_range: "$12-18",
+                        description: "Classic California Cabernet with blackberry notes",
+                        where_to_buy: "Safeway, Total Wine",
+                        link: "https://www.google.com/search?q=Bogle+Cabernet+Sauvignon+buy"
+                    },
+                    {
+                        name: "Columbia Crest Grand Estates Syrah",
+                        type: "Syrah",
+                        region: "Washington",
+                        price_range: "$10-15",
+                        description: "Bold Syrah with spice and dark berry flavors",
+                        where_to_buy: "Most grocery stores",
+                        link: "https://www.google.com/search?q=Columbia+Crest+Syrah+buy"
+                    }
+                ],
+                hiking: [
+                    {
+                        name: "Filoli Gardens Trail",
+                        location: "Woodside, CA",
+                        distance: "2 miles",
+                        elevation: "100 ft",
+                        difficulty: "Easy",
+                        features: ["Gardens", "Historic mansion", "Peaceful"],
+                        description: "Beautiful gardens and easy walking paths",
+                        link: "https://www.google.com/maps/search/Filoli+Gardens+Woodside+CA"
+                    },
+                    {
+                        name: "Uvas Canyon County Park",
+                        location: "Morgan Hill, CA",
+                        distance: "4 miles",
+                        elevation: "300 ft",
+                        difficulty: "Moderate",
+                        features: ["Waterfalls", "Creek", "Shaded"],
+                        description: "Multiple waterfalls and creek crossings",
+                        link: "https://www.google.com/maps/search/Uvas+Canyon+County+Park"
+                    },
+                    {
+                        name: "Stevens Creek County Park",
+                        location: "Cupertino, CA",
+                        distance: "3 miles",
+                        elevation: "150 ft",
+                        difficulty: "Easy-Moderate",
+                        features: ["Close to home", "Lake views", "Shaded"],
+                        description: "Pleasant loop around Stevens Creek Reservoir",
+                        link: "https://www.google.com/maps/search/Stevens+Creek+County+Park+Cupertino"
+                    }
+                ],
+                perfume: [
+                    {
+                        name: "Jo Malone Wood Sage & Sea Salt",
+                        brand: "Jo Malone",
+                        scent_family: ["Woody", "Fresh"],
+                        price_range: "$68-134",
+                        description: "Fresh and woody with sea salt minerality",
+                        where_to_buy: "Sephora, Nordstrom",
+                        link: "https://www.google.com/search?q=Jo+Malone+Wood+Sage+Sea+Salt+buy"
+                    },
+                    {
+                        name: "The Body Shop White Musk",
+                        brand: "The Body Shop",
+                        scent_family: ["Woody", "Floral"],
+                        price_range: "$20-35",
+                        description: "Clean, warm musk with floral undertones",
+                        where_to_buy: "The Body Shop, Ulta",
+                        link: "https://www.google.com/search?q=Body+Shop+White+Musk+buy"
+                    },
+                    {
+                        name: "Pacifica Indian Coconut Nectar",
+                        brand: "Pacifica",
+                        scent_family: ["Warm", "Exotic"],
+                        price_range: "$22-36",
+                        description: "Warm coconut with vanilla and wood notes",
+                        where_to_buy: "Target, Ulta, Whole Foods",
+                        link: "https://www.google.com/search?q=Pacifica+Indian+Coconut+Nectar+buy"
+                    }
+                ]
+            },
+            10: { // October
+                entertainment: [
+                    {
+                        title: "Nobody Wants This",
+                        description: "Romantic comedy series about unlikely love and family dynamics",
+                        rating: 7.9,
+                        type: "tv",
+                        link: "https://www.google.com/search?q=Nobody+Wants+This+Netflix+watch"
+                    },
+                    {
+                        title: "Sweet Magnolias",
+                        description: "Friendship and romance in a small Southern town",
+                        rating: 7.3,
+                        type: "tv", 
+                        link: "https://www.google.com/search?q=Sweet+Magnolias+Netflix"
+                    },
+                    {
+                        title: "The Half of It",
+                        description: "Coming-of-age story about love, friendship, and self-discovery",
+                        rating: 7.4,
+                        type: "movie",
+                        link: "https://www.google.com/search?q=The+Half+of+It+movie+Netflix"
+                    }
+                ],
+                book: [
+                    {
+                        title: "The Power of Now",
+                        author: "Eckhart Tolle",
+                        description: "Spiritual guide to enlightenment and living in the present",
+                        rating: 4.5,
+                        link: "https://www.amazon.com/s?k=Power+of+Now+Eckhart+Tolle"
+                    },
+                    {
+                        title: "Untamed",
+                        author: "Glennon Doyle",
+                        description: "Memoir about courage to live authentically",
+                        rating: 4.3,
+                        link: "https://www.amazon.com/s?k=Untamed+Glennon+Doyle"
+                    },
+                    {
+                        title: "The Gifts of Imperfection",
+                        author: "Brené Brown",
+                        description: "Guide to courage, compassion, and connection",
+                        rating: 4.6,
+                        link: "https://www.amazon.com/s?k=Gifts+of+Imperfection+Brene+Brown"
+                    }
+                ],
+                podcast: [
+                    {
+                        title: "Ten Percent Happier",
+                        creator: "Dan Harris",
+                        description: "Meditation and mindfulness for skeptics",
+                        link: "https://podcasts.apple.com/us/podcast/ten-percent-happier-with-dan-harris/id1087147821"
+                    },
+                    {
+                        title: "The Life Coach School Podcast",
+                        creator: "Brooke Castillo",
+                        description: "Personal development and mindset coaching",
+                        link: "https://podcasts.apple.com/us/podcast/the-life-coach-school-podcast/id830581729"
+                    },
+                    {
+                        title: "On Being",
+                        creator: "Krista Tippett",
+                        description: "Conversations about spirituality and meaning",
+                        link: "https://podcasts.apple.com/us/podcast/on-being-with-krista-tippett/id150892556"
+                    }
+                ],
+                wine: [
+                    {
+                        name: "Seghesio Zinfandel",
+                        type: "Zinfandel",
+                        region: "Sonoma County",
+                        price_range: "$20-30",
+                        description: "Robust with jammy fruit and peppery finish",
+                        where_to_buy: "Wine shops, Total Wine",
+                        link: "https://www.google.com/search?q=Seghesio+Zinfandel+buy+online"
+                    },
+                    {
+                        name: "Decoy Cabernet Sauvignon",
+                        type: "Cabernet Sauvignon",
+                        region: "Sonoma County",
+                        price_range: "$18-25",
+                        description: "Elegant with cherry and plum notes",
+                        where_to_buy: "BevMo, Whole Foods",
+                        link: "https://www.google.com/search?q=Decoy+Cabernet+Sauvignon+buy"
+                    },
+                    {
+                        name: "Alamos Malbec",
+                        type: "Malbec",
+                        region: "Argentina",
+                        price_range: "$8-12",
+                        description: "Affordable everyday Malbec with ripe berry flavors",
+                        where_to_buy: "Most grocery stores",
+                        link: "https://www.google.com/search?q=Alamos+Malbec+buy"
+                    }
+                ],
+                hiking: [
+                    {
+                        name: "Rancho San Antonio Preserve",
+                        location: "Cupertino, CA",
+                        distance: "6 miles",
+                        elevation: "200 ft",
+                        difficulty: "Moderate",
+                        features: ["Close to home", "Wildlife", "Open space"],
+                        description: "Local favorite with rolling hills and farm animals",
+                        link: "https://www.google.com/maps/search/Rancho+San+Antonio+Preserve+Cupertino"
+                    },
+                    {
+                        name: "Pescadero Creek Park",
+                        location: "Pescadero, CA",
+                        distance: "5 miles",
+                        elevation: "250 ft",
+                        difficulty: "Moderate",
+                        features: ["Redwoods", "Creek", "Peaceful"],
+                        description: "Serene hike through towering redwoods",
+                        link: "https://www.google.com/maps/search/Pescadero+Creek+Park"
+                    },
+                    {
+                        name: "Castle Rock State Park",
+                        location: "Los Gatos, CA",
+                        distance: "5 miles",
+                        elevation: "400 ft",
+                        difficulty: "Moderate",
+                        features: ["Rock formations", "Views", "Forest"],
+                        description: "Stunning rock formations and panoramic views",
+                        link: "https://www.google.com/maps/search/Castle+Rock+State+Park+Los+Gatos"
+                    }
+                ],
+                perfume: [
+                    {
+                        name: "Jo Malone Basil & Neroli",
+                        brand: "Jo Malone",
+                        scent_family: ["Herbal", "Citrus"],
+                        price_range: "$68-134",
+                        description: "Uplifting blend of basil and neroli",
+                        where_to_buy: "Sephora, Jo Malone boutique",
+                        link: "https://www.google.com/search?q=Jo+Malone+Basil+Neroli+buy"
+                    },
+                    {
+                        name: "Bath & Body Works Eucalyptus Tea",
+                        brand: "Bath & Body Works",
+                        scent_family: ["Woody", "Herbal"],
+                        price_range: "$12-25",
+                        description: "Eucalyptus and warm tea notes",
+                        where_to_buy: "Bath & Body Works",
+                        link: "https://www.google.com/search?q=Bath+Body+Works+Eucalyptus+Tea"
+                    },
+                    {
+                        name: "Jo Malone Peony & Blush Suede",
+                        brand: "Jo Malone",
+                        scent_family: ["Floral", "Suede"],
+                        price_range: "$68-134",
+                        description: "Soft floral with luxurious suede notes",
+                        where_to_buy: "Sephora, Nordstrom",
+                        link: "https://www.google.com/search?q=Jo+Malone+Peony+Blush+Suede+buy"
+                    }
+                ]
+            },
+            2: { // February
+                entertainment: [
+                    {
+                        title: "Emily in Paris",
+                        description: "Fashion, romance, and culture clash in the City of Light",
+                        rating: 7.0,
+                        type: "tv",
+                        link: "https://www.google.com/search?q=Emily+in+Paris+Netflix+watch"
+                    },
+                    {
+                        title: "Bridgerton",
+                        description: "Period romance drama with modern sensibility",
+                        rating: 7.3,
+                        type: "tv",
+                        link: "https://www.google.com/search?q=Bridgerton+Netflix+watch"
+                    },
+                    {
+                        title: "The Holiday",
+                        description: "Heartwarming romantic comedy about house swapping",
+                        rating: 6.9,
+                        type: "movie",
+                        link: "https://www.google.com/search?q=The+Holiday+movie+stream"
+                    }
+                ],
+                book: [
+                    {
+                        title: "Becoming",
+                        author: "Michelle Obama",
+                        description: "Inspiring memoir from former First Lady",
+                        rating: 4.6,
+                        link: "https://www.amazon.com/s?k=Becoming+Michelle+Obama"
+                    },
+                    {
+                        title: "The Midnight Library",
+                        author: "Matt Haig",
+                        description: "Philosophical novel about life's infinite possibilities",
+                        rating: 4.2,
+                        link: "https://www.amazon.com/s?k=Midnight+Library+Matt+Haig"
+                    },
+                    {
+                        title: "Wild",
+                        author: "Cheryl Strayed",
+                        description: "Memoir of self-discovery through hiking",
+                        rating: 4.1,
+                        link: "https://www.amazon.com/s?k=Wild+Cheryl+Strayed"
+                    }
+                ],
+                podcast: [
+                    {
+                        title: "The Oprah Conversation",
+                        creator: "Oprah Winfrey",
+                        description: "Deep conversations with thought leaders",
+                        link: "https://podcasts.apple.com/us/podcast/the-oprah-conversation/id1534314670"
+                    },
+                    {
+                        title: "Women Who Walk",
+                        creator: "Women Who Walk",
+                        description: "Inspiring stories of resilient women",
+                        link: "https://podcasts.apple.com/us/podcast/women-who-walk/id1535642623"
+                    },
+                    {
+                        title: "SuperSoul Conversations",
+                        creator: "Oprah Winfrey",
+                        description: "Spiritual conversations about living your best life",
+                        link: "https://podcasts.apple.com/us/podcast/supersoul-conversations/id1106883150"
+                    }
+                ],
+                wine: [
+                    {
+                        name: "Caymus Cabernet Sauvignon",
+                        type: "Cabernet Sauvignon",
+                        region: "Napa Valley",
+                        price_range: "$25-35",
+                        description: "Premium Napa Cabernet with rich dark fruit",
+                        where_to_buy: "Total Wine, wine shops",
+                        link: "https://www.google.com/search?q=Caymus+Cabernet+Sauvignon+buy"
+                    },
+                    {
+                        name: "Chateau Ste Michelle Merlot",
+                        type: "Merlot",
+                        region: "Washington",
+                        price_range: "$12-18",
+                        description: "Smooth Merlot with plum and cherry notes",
+                        where_to_buy: "Safeway, QFC",
+                        link: "https://www.google.com/search?q=Chateau+Ste+Michelle+Merlot+buy"
+                    },
+                    {
+                        name: "Santa Rita 120 Cabernet",
+                        type: "Cabernet Sauvignon",
+                        region: "Chile",
+                        price_range: "$8-12",
+                        description: "Excellent value Chilean Cabernet",
+                        where_to_buy: "Most grocery stores",
+                        link: "https://www.google.com/search?q=Santa+Rita+120+Cabernet+buy"
+                    }
+                ],
+                hiking: [
+                    {
+                        name: "Almaden Quicksilver County Park",
+                        location: "San Jose, CA",
+                        distance: "4 miles",
+                        elevation: "300 ft",
+                        difficulty: "Moderate",
+                        features: ["Historic mines", "Views", "Wildflowers"],
+                        description: "Historic mining area with spring wildflowers",
+                        link: "https://www.google.com/maps/search/Almaden+Quicksilver+County+Park"
+                    },
+                    {
+                        name: "Pulgas Ridge Open Space",
+                        location: "San Carlos, CA",
+                        distance: "3 miles",
+                        elevation: "200 ft",
+                        difficulty: "Easy-Moderate",
+                        features: ["Oak woodlands", "Creek", "Wildlife"],
+                        description: "Peaceful trail through oak woodlands",
+                        link: "https://www.google.com/maps/search/Pulgas+Ridge+Open+Space"
+                    },
+                    {
+                        name: "Saratoga Gap Trail",
+                        location: "Saratoga, CA",
+                        distance: "5 miles",
+                        elevation: "250 ft",
+                        difficulty: "Moderate",
+                        features: ["Redwoods", "Views", "Cool climate"],
+                        description: "Beautiful redwood forest trail",
+                        link: "https://www.google.com/maps/search/Saratoga+Gap+Trail"
+                    }
+                ],
+                perfume: [
+                    {
+                        name: "Jo Malone Lime Basil & Mandarin",
+                        brand: "Jo Malone",
+                        scent_family: ["Citrus", "Herbal"],
+                        price_range: "$68-134",
+                        description: "Fresh citrus blend with herbal undertones",
+                        where_to_buy: "Sephora, Nordstrom",
+                        link: "https://www.google.com/search?q=Jo+Malone+Lime+Basil+Mandarin+buy"
+                    },
+                    {
+                        name: "Clean Warm Cotton",
+                        brand: "Clean",
+                        scent_family: ["Fresh", "Soft"],
+                        price_range: "$25-40",
+                        description: "Comforting scent of fresh laundry",
+                        where_to_buy: "Ulta, Sephora",
+                        link: "https://www.google.com/search?q=Clean+Warm+Cotton+perfume+buy"
+                    },
+                    {
+                        name: "Tocca Florence",
+                        brand: "Tocca",
+                        scent_family: ["Floral", "Fruity"],
+                        price_range: "$36-76",
+                        description: "Romantic Italian-inspired bergamot and pear",
+                        where_to_buy: "Sephora, Anthropologie",
+                        link: "https://www.google.com/search?q=Tocca+Florence+perfume+buy"
+                    }
+                ]
+            },
+            3: { // March
+                entertainment: [
+                    {
+                        title: "The Good Place",
+                        description: "Philosophical comedy about ethics and afterlife",
+                        rating: 8.2,
+                        type: "tv",
+                        link: "https://www.google.com/search?q=The+Good+Place+Netflix+watch"
+                    },
+                    {
+                        title: "Anne with an E",
+                        description: "Beautiful adaptation of Anne of Green Gables",
+                        rating: 8.7,
+                        type: "tv",
+                        link: "https://www.google.com/search?q=Anne+with+an+E+Netflix+watch"
+                    },
+                    {
+                        title: "Julie & Julia",
+                        description: "Inspiring story about cooking and following dreams",
+                        rating: 7.0,
+                        type: "movie",
+                        link: "https://www.google.com/search?q=Julie+Julia+movie+stream"
+                    }
+                ],
+                book: [
+                    {
+                        title: "Eat, Pray, Love",
+                        author: "Elizabeth Gilbert",
+                        description: "Journey of self-discovery through travel",
+                        rating: 3.9,
+                        link: "https://www.amazon.com/s?k=Eat+Pray+Love+Elizabeth+Gilbert"
+                    },
+                    {
+                        title: "The Gifts of Imperfection",
+                        author: "Brené Brown",
+                        description: "Guide to wholehearted living",
+                        rating: 4.6,
+                        link: "https://www.amazon.com/s?k=Gifts+Imperfection+Brene+Brown"
+                    },
+                    {
+                        title: "A New Earth",
+                        author: "Eckhart Tolle",
+                        description: "Awakening to your life's purpose",
+                        rating: 4.4,
+                        link: "https://www.amazon.com/s?k=New+Earth+Eckhart+Tolle"
+                    }
+                ],
+                podcast: [
+                    {
+                        title: "Happier with Gretchen Rubin",
+                        creator: "Gretchen Rubin",
+                        description: "Practical happiness and good habits",
+                        link: "https://podcasts.apple.com/us/podcast/happier-with-gretchen-rubin/id1047879865"
+                    },
+                    {
+                        title: "The School of Greatness",
+                        creator: "Lewis Howes",
+                        description: "Inspiring interviews with high achievers",
+                        link: "https://podcasts.apple.com/us/podcast/the-school-of-greatness/id596047499"
+                    },
+                    {
+                        title: "Optimal Living Daily",
+                        creator: "Justin Malik",
+                        description: "Daily minimalism and personal development",
+                        link: "https://podcasts.apple.com/us/podcast/optimal-living-daily/id1127305292"
+                    }
+                ],
+                wine: [
+                    {
+                        name: "Black Box Cabernet Sauvignon",
+                        type: "Cabernet Sauvignon",
+                        region: "California",
+                        price_range: "$18-22",
+                        description: "Convenient box wine with rich flavor",
+                        where_to_buy: "Costco, Target",
+                        link: "https://www.google.com/search?q=Black+Box+Cabernet+Sauvignon+buy"
+                    },
+                    {
+                        name: "Concha y Toro Frontera Merlot",
+                        type: "Merlot",
+                        region: "Chile",
+                        price_range: "$6-10",
+                        description: "Smooth everyday drinking wine",
+                        where_to_buy: "Most grocery stores",
+                        link: "https://www.google.com/search?q=Concha+y+Toro+Frontera+Merlot+buy"
+                    },
+                    {
+                        name: "Kendall-Jackson Vintner's Reserve Merlot",
+                        type: "Merlot",
+                        region: "California",
+                        price_range: "$18-25",
+                        description: "Premium California Merlot with complex flavors",
+                        where_to_buy: "Total Wine, Whole Foods",
+                        link: "https://www.google.com/search?q=Kendall+Jackson+Merlot+buy"
+                    }
+                ],
+                hiking: [
+                    {
+                        name: "Russian Ridge Open Space",
+                        location: "Portola Valley, CA",
+                        distance: "4 miles",
+                        elevation: "200 ft",
+                        difficulty: "Moderate",
+                        features: ["Grasslands", "Views", "Wildflowers"],
+                        description: "Rolling hills with spectacular Bay Area views",
+                        link: "https://www.google.com/maps/search/Russian+Ridge+Open+Space"
+                    },
+                    {
+                        name: "Windy Hill Open Space",
+                        location: "Portola Valley, CA",
+                        distance: "3 miles",
+                        elevation: "300 ft",
+                        difficulty: "Moderate",
+                        features: ["360 views", "Grasslands", "Peaceful"],
+                        description: "Panoramic views from the summit",
+                        link: "https://www.google.com/maps/search/Windy+Hill+Open+Space"
+                    },
+                    {
+                        name: "Edgewood Park",
+                        location: "Redwood City, CA",
+                        distance: "4 miles",
+                        elevation: "250 ft",
+                        difficulty: "Easy-Moderate",
+                        features: ["Wildflowers", "Oak trees", "Serpentine"],
+                        description: "Spring wildflower destination",
+                        link: "https://www.google.com/maps/search/Edgewood+Park+Redwood+City"
+                    }
+                ],
+                perfume: [
+                    {
+                        name: "Philosophy Amazing Grace",
+                        brand: "Philosophy",
+                        scent_family: ["Clean", "Soft"],
+                        price_range: "$25-58",
+                        description: "Pure, crisp scent of clean skin",
+                        where_to_buy: "Ulta, QVC",
+                        link: "https://www.google.com/search?q=Philosophy+Amazing+Grace+buy"
+                    },
+                    {
+                        name: "Hermès Un Jardin Sur Le Toit",
+                        brand: "Hermès",
+                        scent_family: ["Green", "Fresh"],
+                        price_range: "$115-160",
+                        description: "Rooftop garden with grass and pear",
+                        where_to_buy: "Hermès, Sephora",
+                        link: "https://www.google.com/search?q=Hermes+Un+Jardin+Sur+Le+Toit+buy"
+                    },
+                    {
+                        name: "L'Artisan Parfumeur Thé Pour Un Été",
+                        brand: "L'Artisan Parfumeur",
+                        scent_family: ["Tea", "Fresh"],
+                        price_range: "$95-145",
+                        description: "Refreshing green tea and mint",
+                        where_to_buy: "Luckyscent, online",
+                        link: "https://www.google.com/search?q=L'Artisan+The+Pour+Un+Ete+buy"
+                    }
+                ]
+            },
+            4: { // April
+                entertainment: [
+                    {
+                        title: "Schitt's Creek",
+                        description: "Heartwarming comedy about family and growth",
+                        rating: 8.5,
+                        type: "tv",
+                        link: "https://www.google.com/search?q=Schitt's+Creek+Netflix+watch"
+                    },
+                    {
+                        title: "Ted Lasso",
+                        description: "Feel-good series about kindness and optimism",
+                        rating: 8.8,
+                        type: "tv",
+                        link: "https://www.google.com/search?q=Ted+Lasso+Apple+TV+watch"
+                    },
+                    {
+                        title: "The Best Exotic Marigold Hotel",
+                        description: "Uplifting story about starting over in India",
+                        rating: 7.3,
+                        type: "movie",
+                        link: "https://www.google.com/search?q=Best+Exotic+Marigold+Hotel+stream"
+                    }
+                ],
+                book: [
+                    {
+                        title: "The Four Agreements",
+                        author: "Don Miguel Ruiz",
+                        description: "Toltec wisdom for personal freedom",
+                        rating: 4.3,
+                        link: "https://www.amazon.com/s?k=Four+Agreements+Don+Miguel+Ruiz"
+                    },
+                    {
+                        title: "Rising Strong",
+                        author: "Brené Brown",
+                        description: "How the ability to reset transforms the way we live",
+                        rating: 4.5,
+                        link: "https://www.amazon.com/s?k=Rising+Strong+Brene+Brown"
+                    },
+                    {
+                        title: "The Book of Joy",
+                        author: "Dalai Lama & Desmond Tutu",
+                        description: "Lasting happiness in a changing world",
+                        rating: 4.6,
+                        link: "https://www.amazon.com/s?k=Book+of+Joy+Dalai+Lama"
+                    }
+                ],
+                podcast: [
+                    {
+                        title: "The Daily Shine",
+                        creator: "Shine Daily",
+                        description: "Daily motivation and self-care",
+                        link: "https://podcasts.apple.com/us/podcast/the-daily-shine/id1364984556"
+                    },
+                    {
+                        title: "Mindful in Minutes",
+                        creator: "Kelly Smith",
+                        description: "Quick mindfulness practices for busy lives",
+                        link: "https://podcasts.apple.com/us/podcast/mindful-in-minutes-meditation/id1328437262"
+                    },
+                    {
+                        title: "The Longest Shortest Time",
+                        creator: "Hillary Frank",
+                        description: "Stories about the early years of parenting",
+                        link: "https://podcasts.apple.com/us/podcast/the-longest-shortest-time/id509125043"
+                    }
+                ],
+                wine: [
+                    {
+                        name: "Oyster Bay Pinot Noir",
+                        type: "Pinot Noir",
+                        region: "New Zealand",
+                        price_range: "$9-14",
+                        description: "Light, elegant red with cherry notes",
+                        where_to_buy: "Trader Joe's, Safeway",
+                        link: "https://www.google.com/search?q=Oyster+Bay+Pinot+Noir+buy"
+                    },
+                    {
+                        name: "Bogle Petite Sirah",
+                        type: "Petite Sirah",
+                        region: "California",
+                        price_range: "$14-20",
+                        description: "Bold and peppery with dark fruit",
+                        where_to_buy: "Total Wine, wine shops",
+                        link: "https://www.google.com/search?q=Bogle+Petite+Sirah+buy"
+                    },
+                    {
+                        name: "La Crema Pinot Noir",
+                        type: "Pinot Noir",
+                        region: "Sonoma Coast",
+                        price_range: "$18-25",
+                        description: "Elegant coastal Pinot with complexity",
+                        where_to_buy: "BevMo, Whole Foods",
+                        link: "https://www.google.com/search?q=La+Crema+Pinot+Noir+buy"
+                    }
+                ],
+                hiking: [
+                    {
+                        name: "Pinnacles National Park",
+                        location: "Pinnacles, CA",
+                        distance: "5 miles",
+                        elevation: "400 ft",
+                        difficulty: "Moderate",
+                        features: ["Rock formations", "Condors", "Caves"],
+                        description: "Unique rock formations and California condors",
+                        link: "https://www.google.com/maps/search/Pinnacles+National+Park"
+                    },
+                    {
+                        name: "Monte Bello Open Space",
+                        location: "Cupertino, CA",
+                        distance: "6 miles",
+                        elevation: "500 ft",
+                        difficulty: "Moderate-Hard",
+                        features: ["Views", "Ridgeline", "Workout"],
+                        description: "Challenging climb with rewarding views",
+                        link: "https://www.google.com/maps/search/Monte+Bello+Open+Space"
+                    },
+                    {
+                        name: "Purisima Creek Redwoods",
+                        location: "Half Moon Bay, CA",
+                        distance: "4 miles",
+                        elevation: "300 ft",
+                        difficulty: "Moderate",
+                        features: ["Redwoods", "Creek", "Cool", "Peaceful"],
+                        description: "Serene redwood forest near the coast",
+                        link: "https://www.google.com/maps/search/Purisima+Creek+Redwoods"
+                    }
+                ],
+                perfume: [
+                    {
+                        name: "Diptyque Philosykos",
+                        brand: "Diptyque",
+                        scent_family: ["Green", "Fig"],
+                        price_range: "$98-165",
+                        description: "The essence of fig tree in all its forms",
+                        where_to_buy: "Nordstrom, Diptyque boutique",
+                        link: "https://www.google.com/search?q=Diptyque+Philosykos+buy"
+                    },
+                    {
+                        name: "Commodity Book",
+                        brand: "Commodity",
+                        scent_family: ["Woody", "Vanilla"],
+                        price_range: "$75-100",
+                        description: "Warm vanilla and wood like old books",
+                        where_to_buy: "Sephora, online",
+                        link: "https://www.google.com/search?q=Commodity+Book+perfume+buy"
+                    },
+                    {
+                        name: "Maison Margiela REPLICA Under the Lemon Trees",
+                        brand: "Maison Margiela",
+                        scent_family: ["Citrus", "Green"],
+                        price_range: "$82-146",
+                        description: "Mediterranean lemon grove experience",
+                        where_to_buy: "Sephora, online",
+                        link: "https://www.google.com/search?q=Maison+Margiela+Under+Lemon+Trees+buy"
+                    }
+                ]
+            },
+            5: { // May
+                entertainment: [
+                    {
+                        title: "Derry Girls",
+                        description: "Coming-of-age comedy set in Northern Ireland",
+                        rating: 8.5,
+                        type: "tv",
+                        link: "https://www.google.com/search?q=Derry+Girls+Netflix+watch"
+                    },
+                    {
+                        title: "Jane the Virgin",
+                        description: "Heartwarming dramedy about family and dreams",
+                        rating: 7.9,
+                        type: "tv",
+                        link: "https://www.google.com/search?q=Jane+the+Virgin+Netflix+watch"
+                    },
+                    {
+                        title: "The Hundred-Foot Journey",
+                        description: "Cultural clash and culinary passion in France",
+                        rating: 7.3,
+                        type: "movie",
+                        link: "https://www.google.com/search?q=Hundred+Foot+Journey+movie+stream"
+                    }
+                ],
+                book: [
+                    {
+                        title: "Maybe You Should Talk to Someone",
+                        author: "Lori Gottlieb",
+                        description: "Therapist's journey through her own therapy",
+                        rating: 4.5,
+                        link: "https://www.amazon.com/s?k=Maybe+You+Should+Talk+Someone"
+                    },
+                    {
+                        title: "The Artist's Way",
+                        author: "Julia Cameron",
+                        description: "Spiritual path to higher creativity",
+                        rating: 4.2,
+                        link: "https://www.amazon.com/s?k=Artist's+Way+Julia+Cameron"
+                    },
+                    {
+                        title: "Mindset",
+                        author: "Carol Dweck",
+                        description: "The new psychology of success",
+                        rating: 4.3,
+                        link: "https://www.amazon.com/s?k=Mindset+Carol+Dweck"
+                    }
+                ],
+                podcast: [
+                    {
+                        title: "Everything Happens with Kate Bowler",
+                        creator: "Kate Bowler",
+                        description: "Conversations about suffering and meaning",
+                        link: "https://podcasts.apple.com/us/podcast/everything-happens-with-kate-bowler/id1470568066"
+                    },
+                    {
+                        title: "The Robcast",
+                        creator: "Rob Bell",
+                        description: "Spiritual conversations for curious minds",
+                        link: "https://podcasts.apple.com/us/podcast/the-robcast/id927780705"
+                    },
+                    {
+                        title: "Dear Sugars",
+                        creator: "Cheryl Strayed & Steve Almond",
+                        description: "Radical empathy advice column",
+                        link: "https://podcasts.apple.com/us/podcast/dear-sugars/id950739233"
+                    }
+                ],
+                wine: [
+                    {
+                        name: "Cupcake Red Velvet",
+                        type: "Red Blend",
+                        region: "California",
+                        price_range: "$10-15",
+                        description: "Smooth blend with chocolate notes",
+                        where_to_buy: "Target, Safeway",
+                        link: "https://www.google.com/search?q=Cupcake+Red+Velvet+wine+buy"
+                    },
+                    {
+                        name: "19 Crimes Red Blend",
+                        type: "Red Blend",
+                        region: "Australia",
+                        price_range: "$8-12",
+                        description: "Bold Australian blend with interesting story",
+                        where_to_buy: "Most grocery stores",
+                        link: "https://www.google.com/search?q=19+Crimes+Red+Blend+buy"
+                    },
+                    {
+                        name: "Educated Guess Cabernet",
+                        type: "Cabernet Sauvignon",
+                        region: "Napa Valley",
+                        price_range: "$22-30",
+                        description: "Premium Napa Cabernet at great value",
+                        where_to_buy: "Costco, wine shops",
+                        link: "https://www.google.com/search?q=Educated+Guess+Cabernet+buy"
+                    }
+                ],
+                hiking: [
+                    {
+                        name: "Almaden Lake Park",
+                        location: "San Jose, CA",
+                        distance: "3 miles",
+                        elevation: "50 ft",
+                        difficulty: "Easy",
+                        features: ["Lake", "Flat", "Wildlife"],
+                        description: "Easy lake loop perfect for relaxation",
+                        link: "https://www.google.com/maps/search/Almaden+Lake+Park+San+Jose"
+                    },
+                    {
+                        name: "Sanborn County Park",
+                        location: "Saratoga, CA",
+                        distance: "4 miles",
+                        elevation: "200 ft",
+                        difficulty: "Easy-Moderate",
+                        features: ["Redwoods", "Creek", "Cool"],
+                        description: "Pleasant trail through redwood groves",
+                        link: "https://www.google.com/maps/search/Sanborn+County+Park+Saratoga"
+                    },
+                    {
+                        name: "Sierra Azul Open Space",
+                        location: "Los Gatos, CA",
+                        distance: "5 miles",
+                        elevation: "400 ft",
+                        difficulty: "Moderate",
+                        features: ["Views", "Wildflowers", "Open"],
+                        description: "Spring wildflowers and valley views",
+                        link: "https://www.google.com/maps/search/Sierra+Azul+Open+Space"
+                    }
+                ],
+                perfume: [
+                    {
+                        name: "Nest New York Seville Orange",
+                        brand: "Nest",
+                        scent_family: ["Citrus", "Spice"],
+                        price_range: "$52-88",
+                        description: "Sparkling orange with warm spices",
+                        where_to_buy: "Nordstrom, Sephora",
+                        link: "https://www.google.com/search?q=Nest+Seville+Orange+buy"
+                    },
+                    {
+                        name: "Kai Perfume Oil",
+                        brand: "Kai",
+                        scent_family: ["Floral", "Tropical"],
+                        price_range: "$60-98",
+                        description: "Exotic gardenia fragrance from Hawaii",
+                        where_to_buy: "Anthropologie, online",
+                        link: "https://www.google.com/search?q=Kai+Perfume+Oil+buy"
+                    },
+                    {
+                        name: "Ellis Brooklyn MYTH",
+                        brand: "Ellis Brooklyn",
+                        scent_family: ["Woody", "Spice"],
+                        price_range: "$96-110",
+                        description: "Mysterious blend of spices and woods",
+                        where_to_buy: "Sephora, online",
+                        link: "https://www.google.com/search?q=Ellis+Brooklyn+MYTH+buy"
+                    }
+                ]
+            },
+            6: { // June
+                entertainment: [
+                    {
+                        title: "Call the Midwife",
+                        description: "Heartwarming British drama about community and care",
+                        rating: 8.6,
+                        type: "tv",
+                        link: "https://www.google.com/search?q=Call+the+Midwife+PBS+watch"
+                    },
+                    {
+                        title: "Ginny & Georgia",
+                        description: "Mother-daughter relationship drama",
+                        rating: 7.5,
+                        type: "tv",
+                        link: "https://www.google.com/search?q=Ginny+Georgia+Netflix+watch"
+                    },
+                    {
+                        title: "Mamma Mia!",
+                        description: "Feel-good musical set in beautiful Greece",
+                        rating: 6.4,
+                        type: "movie",
+                        link: "https://www.google.com/search?q=Mamma+Mia+movie+stream"
+                    }
+                ],
+                book: [
+                    {
+                        title: "Option B",
+                        author: "Sheryl Sandberg & Adam Grant",
+                        description: "Facing adversity, building resilience, and finding joy",
+                        rating: 4.4,
+                        link: "https://www.amazon.com/s?k=Option+B+Sheryl+Sandberg"
+                    },
+                    {
+                        title: "The Happiness Project",
+                        author: "Gretchen Rubin",
+                        description: "One person's year-long quest for happiness",
+                        rating: 3.9,
+                        link: "https://www.amazon.com/s?k=Happiness+Project+Gretchen+Rubin"
+                    },
+                    {
+                        title: "Dare to Lead",
+                        author: "Brené Brown",
+                        description: "Brave work, tough conversations, whole hearts",
+                        rating: 4.5,
+                        link: "https://www.amazon.com/s?k=Dare+to+Lead+Brene+Brown"
+                    }
+                ],
+                podcast: [
+                    {
+                        title: "Unlocking Us",
+                        creator: "Brené Brown",
+                        description: "Conversations about courage, vulnerability, and shame",
+                        link: "https://podcasts.apple.com/us/podcast/unlocking-us-with-brene-brown/id1494350511"
+                    },
+                    {
+                        title: "The Calm Mind",
+                        creator: "Mel Robbins",
+                        description: "Techniques for managing anxiety and stress",
+                        link: "https://podcasts.apple.com/us/podcast/the-mel-robbins-podcast/id1646101002"
+                    },
+                    {
+                        title: "Therapy for Black Girls",
+                        creator: "Dr. Joy Harden Bradford",
+                        description: "Mental health conversations for women of color",
+                        link: "https://podcasts.apple.com/us/podcast/therapy-for-black-girls/id1326293808"
+                    }
+                ],
+                wine: [
+                    {
+                        name: "Josh Cellars Cabernet Sauvignon",
+                        type: "Cabernet Sauvignon",
+                        region: "California",
+                        price_range: "$12-18",
+                        description: "Approachable Cabernet with food-friendly style",
+                        where_to_buy: "Most grocery stores",
+                        link: "https://www.google.com/search?q=Josh+Cellars+Cabernet+buy"
+                    },
+                    {
+                        name: "Ménage à Trois Red Blend",
+                        type: "Red Blend",
+                        region: "California",
+                        price_range: "$9-14",
+                        description: "Playful blend of three grape varieties",
+                        where_to_buy: "Target, Walmart",
+                        link: "https://www.google.com/search?q=Menage+a+Trois+Red+Blend+buy"
+                    },
+                    {
+                        name: "Columbia Crest Reserve Cabernet",
+                        type: "Cabernet Sauvignon",
+                        region: "Washington",
+                        price_range: "$15-22",
+                        description: "Premium Washington Cabernet",
+                        where_to_buy: "Costco, Total Wine",
+                        link: "https://www.google.com/search?q=Columbia+Crest+Reserve+Cabernet+buy"
+                    }
+                ],
+                hiking: [
+                    {
+                        name: "Año Nuevo State Park",
+                        location: "Pescadero, CA",
+                        distance: "3 miles",
+                        elevation: "100 ft",
+                        difficulty: "Easy",
+                        features: ["Ocean", "Wildlife", "Sand dunes"],
+                        description: "Coastal trail with elephant seals",
+                        link: "https://www.google.com/maps/search/Ano+Nuevo+State+Park"
+                    },
+                    {
+                        name: "Wilder Ranch State Park",
+                        location: "Santa Cruz, CA",
+                        distance: "4 miles",
+                        elevation: "150 ft",
+                        difficulty: "Easy-Moderate",
+                        features: ["Ocean views", "Historic ranch", "Bluffs"],
+                        description: "Coastal bluffs with historic ranch",
+                        link: "https://www.google.com/maps/search/Wilder+Ranch+State+Park"
+                    },
+                    {
+                        name: "Butano State Park",
+                        location: "Pescadero, CA",
+                        distance: "5 miles",
+                        elevation: "300 ft",
+                        difficulty: "Moderate",
+                        features: ["Redwoods", "Creek", "Cool"],
+                        description: "Hidden redwood gem near the coast",
+                        link: "https://www.google.com/maps/search/Butano+State+Park"
+                    }
+                ],
+                perfume: [
+                    {
+                        name: "Hermès Jour d'Hermès",
+                        brand: "Hermès",
+                        scent_family: ["Floral", "Fresh"],
+                        price_range: "$115-160",
+                        description: "Radiant femininity in a gardenia bouquet",
+                        where_to_buy: "Hermès, Sephora",
+                        link: "https://www.google.com/search?q=Hermes+Jour+d'Hermes+buy"
+                    },
+                    {
+                        name: "Glossier Olivia Rodrigo",
+                        brand: "Glossier",
+                        scent_family: ["Fresh", "Citrus"],
+                        price_range: "$64-78",
+                        description: "Fresh and youthful with citrus notes",
+                        where_to_buy: "Glossier, Sephora",
+                        link: "https://www.google.com/search?q=Glossier+Olivia+Rodrigo+perfume+buy"
+                    },
+                    {
+                        name: "Le Labo Santal 33",
+                        brand: "Le Labo",
+                        scent_family: ["Woody", "Spice"],
+                        price_range: "$182-380",
+                        description: "Cult favorite sandalwood blend",
+                        where_to_buy: "Le Labo, Sephora",
+                        link: "https://www.google.com/search?q=Le+Labo+Santal+33+buy"
+                    }
+                ]
+            },
+            7: { // July
+                entertainment: [
+                    {
+                        title: "Somebody Somewhere",
+                        description: "Heartwarming comedy about small-town life and healing",
+                        rating: 8.4,
+                        type: "tv",
+                        link: "https://www.google.com/search?q=Somebody+Somewhere+HBO+watch"
+                    },
+                    {
+                        title: "This Is Us",
+                        description: "Multi-generational family drama about love and loss",
+                        rating: 8.7,
+                        type: "tv",
+                        link: "https://www.google.com/search?q=This+Is+Us+NBC+watch"
+                    },
+                    {
+                        title: "The Intern",
+                        description: "Feel-good workplace comedy with Robert De Niro",
+                        rating: 7.1,
+                        type: "movie",
+                        link: "https://www.google.com/search?q=The+Intern+movie+stream"
+                    }
+                ],
+                book: [
+                    {
+                        title: "Glennon Doyle: Love Warrior",
+                        author: "Glennon Doyle",
+                        description: "A memoir about rebuilding a marriage",
+                        rating: 4.2,
+                        link: "https://www.amazon.com/s?k=Love+Warrior+Glennon+Doyle"
+                    },
+                    {
+                        title: "The Untethered Soul",
+                        author: "Michael Singer",
+                        description: "The journey beyond yourself",
+                        rating: 4.5,
+                        link: "https://www.amazon.com/s?k=Untethered+Soul+Michael+Singer"
+                    },
+                    {
+                        title: "Daring Greatly",
+                        author: "Brené Brown",
+                        description: "How the courage to be vulnerable transforms us",
+                        rating: 4.4,
+                        link: "https://www.amazon.com/s?k=Daring+Greatly+Brene+Brown"
+                    }
+                ],
+                podcast: [
+                    {
+                        title: "Fresh Air",
+                        creator: "Terry Gross",
+                        description: "In-depth interviews with fascinating people",
+                        link: "https://podcasts.apple.com/us/podcast/fresh-air/id214089682"
+                    },
+                    {
+                        title: "Meditation Minis",
+                        creator: "Chel Hamilton",
+                        description: "5-minute guided meditations",
+                        link: "https://podcasts.apple.com/us/podcast/meditation-minis-podcast/id1066883088"
+                    },
+                    {
+                        title: "The Happiness Lab",
+                        creator: "Dr. Laurie Santos",
+                        description: "Science-backed strategies for happiness",
+                        link: "https://podcasts.apple.com/us/podcast/the-happiness-lab-with-dr-laurie-santos/id1474245040"
+                    }
+                ],
+                wine: [
+                    {
+                        name: "Barefoot Cabernet Sauvignon",
+                        type: "Cabernet Sauvignon",
+                        region: "California",
+                        price_range: "$5-8",
+                        description: "Budget-friendly everyday drinking wine",
+                        where_to_buy: "All grocery stores",
+                        link: "https://www.google.com/search?q=Barefoot+Cabernet+Sauvignon+buy"
+                    },
+                    {
+                        name: "Bogle Phantom",
+                        type: "Red Blend",
+                        region: "California",
+                        price_range: "$16-22",
+                        description: "Rich blend with Petite Sirah backbone",
+                        where_to_buy: "Total Wine, BevMo",
+                        link: "https://www.google.com/search?q=Bogle+Phantom+wine+buy"
+                    },
+                    {
+                        name: "Apothic Red",
+                        type: "Red Blend",
+                        region: "California",
+                        price_range: "$8-12",
+                        description: "Bold blend with dark fruit flavors",
+                        where_to_buy: "Most grocery stores",
+                        link: "https://www.google.com/search?q=Apothic+Red+wine+buy"
+                    }
+                ],
+                hiking: [
+                    {
+                        name: "Skyline-to-the-Sea Trail",
+                        location: "Big Basin, CA",
+                        distance: "6 miles",
+                        elevation: "400 ft",
+                        difficulty: "Moderate",
+                        features: ["Redwoods", "Waterfalls", "Creek"],
+                        description: "Stunning redwood forest trail",
+                        link: "https://www.google.com/maps/search/Skyline+to+Sea+Trail+Big+Basin"
+                    },
+                    {
+                        name: "Nisene Marks State Park",
+                        location: "Aptos, CA",
+                        distance: "4 miles",
+                        elevation: "200 ft",
+                        difficulty: "Easy-Moderate",
+                        features: ["Redwoods", "Historic", "Cool"],
+                        description: "Historic logging area now peaceful forest",
+                        link: "https://www.google.com/maps/search/Nisene+Marks+State+Park"
+                    },
+                    {
+                        name: "Henry Cowell Redwoods",
+                        location: "Felton, CA",
+                        distance: "3 miles",
+                        elevation: "100 ft",
+                        difficulty: "Easy",
+                        features: ["Old growth", "Nature center", "Easy"],
+                        description: "Magnificent old-growth redwood grove",
+                        link: "https://www.google.com/maps/search/Henry+Cowell+Redwoods+State+Park"
+                    }
+                ],
+                perfume: [
+                    {
+                        name: "Byredo Gypsy Water",
+                        brand: "Byredo",
+                        scent_family: ["Woody", "Fresh"],
+                        price_range: "$180-380",
+                        description: "Bohemian blend of pine and sandalwood",
+                        where_to_buy: "Sephora, Byredo",
+                        link: "https://www.google.com/search?q=Byredo+Gypsy+Water+buy"
+                    },
+                    {
+                        name: "Tom Ford Oud Wood",
+                        brand: "Tom Ford",
+                        scent_family: ["Woody", "Oriental"],
+                        price_range: "$230-350",
+                        description: "Luxurious oud blend with sandalwood",
+                        where_to_buy: "Nordstrom, Sephora",
+                        link: "https://www.google.com/search?q=Tom+Ford+Oud+Wood+buy"
+                    },
+                    {
+                        name: "Malin+Goetz Cannabis",
+                        brand: "Malin+Goetz",
+                        scent_family: ["Green", "Fresh"],
+                        price_range: "$82-126",
+                        description: "Fresh cannabis leaf with fig and bay",
+                        where_to_buy: "Sephora, online",
+                        link: "https://www.google.com/search?q=Malin+Goetz+Cannabis+perfume+buy"
+                    }
+                ]
+            },
+            8: { // August
+                entertainment: [
+                    {
+                        title: "Grace and Frankie",
+                        description: "Comedy about friendship and starting over later in life",
+                        rating: 8.2,
+                        type: "tv",
+                        link: "https://www.google.com/search?q=Grace+and+Frankie+Netflix+watch"
+                    },
+                    {
+                        title: "Queer Eye",
+                        description: "Feel-good makeover show about self-love",
+                        rating: 8.5,
+                        type: "tv",
+                        link: "https://www.google.com/search?q=Queer+Eye+Netflix+watch"
+                    },
+                    {
+                        title: "The Proposal",
+                        description: "Romantic comedy with Sandra Bullock",
+                        rating: 6.7,
+                        type: "movie",
+                        link: "https://www.google.com/search?q=The+Proposal+movie+stream"
+                    }
+                ],
+                book: [
+                    {
+                        title: "The Subtle Art of Not Giving a F*ck",
+                        author: "Mark Manson",
+                        description: "A counterintuitive approach to living a good life",
+                        rating: 4.0,
+                        link: "https://www.amazon.com/s?k=Subtle+Art+Not+Giving+F+Mark+Manson"
+                    },
+                    {
+                        title: "Big Magic",
+                        author: "Elizabeth Gilbert",
+                        description: "Creative living beyond fear",
+                        rating: 4.1,
+                        link: "https://www.amazon.com/s?k=Big+Magic+Elizabeth+Gilbert"
+                    },
+                    {
+                        title: "The Gifts of Imperfection",
+                        author: "Brené Brown",
+                        description: "Let go of who you think you're supposed to be",
+                        rating: 4.6,
+                        link: "https://www.amazon.com/s?k=Gifts+Imperfection+Brene+Brown"
+                    }
+                ],
+                podcast: [
+                    {
+                        title: "The Goal Digger Podcast",
+                        creator: "Jenna Kutcher",
+                        description: "Business and life strategy for ambitious women",
+                        link: "https://podcasts.apple.com/us/podcast/goal-digger-podcast/id1178704872"
+                    },
+                    {
+                        title: "Armchair Expert",
+                        creator: "Dax Shepard",
+                        description: "Honest conversations with celebrities and experts",
+                        link: "https://podcasts.apple.com/us/podcast/armchair-expert-with-dax-shepard/id1345682353"
+                    },
+                    {
+                        title: "The Model Health Show",
+                        creator: "Shawn Stevenson",
+                        description: "Health, nutrition, and lifestyle optimization",
+                        link: "https://podcasts.apple.com/us/podcast/the-model-health-show/id910721395"
+                    }
+                ],
+                wine: [
+                    {
+                        name: "Prisoner Wine Company Red Blend",
+                        type: "Red Blend",
+                        region: "Napa Valley",
+                        price_range: "$28-38",
+                        description: "Premium Napa blend with bold character",
+                        where_to_buy: "Total Wine, BevMo",
+                        link: "https://www.google.com/search?q=Prisoner+Wine+Red+Blend+buy"
+                    },
+                    {
+                        name: "Woodbridge Cabernet Sauvignon",
+                        type: "Cabernet Sauvignon",
+                        region: "California",
+                        price_range: "$6-10",
+                        description: "Robert Mondavi's everyday drinking wine",
+                        where_to_buy: "All grocery stores",
+                        link: "https://www.google.com/search?q=Woodbridge+Cabernet+Sauvignon+buy"
+                    },
+                    {
+                        name: "Layer Cake Malbec",
+                        type: "Malbec",
+                        region: "Argentina",
+                        price_range: "$12-18",
+                        description: "Rich Argentine Malbec with chocolate notes",
+                        where_to_buy: "BevMo, Total Wine",
+                        link: "https://www.google.com/search?q=Layer+Cake+Malbec+buy"
+                    }
+                ],
+                hiking: [
+                    {
+                        name: "Coyote Hills Regional Park",
+                        location: "Fremont, CA",
+                        distance: "3 miles",
+                        elevation: "200 ft",
+                        difficulty: "Easy-Moderate",
+                        features: ["Bay views", "Wildlife", "Marshlands"],
+                        description: "Rolling hills with San Francisco Bay views",
+                        link: "https://www.google.com/maps/search/Coyote+Hills+Regional+Park"
+                    },
+                    {
+                        name: "Mount Diablo State Park",
+                        location: "Clayton, CA",
+                        distance: "4 miles",
+                        elevation: "600 ft",
+                        difficulty: "Moderate-Hard",
+                        features: ["Summit views", "Wildflowers", "Challenge"],
+                        description: "Challenging hike with incredible summit views",
+                        link: "https://www.google.com/maps/search/Mount+Diablo+State+Park"
+                    },
+                    {
+                        name: "Redwood Regional Park",
+                        location: "Oakland, CA",
+                        distance: "5 miles",
+                        elevation: "300 ft",
+                        difficulty: "Moderate",
+                        features: ["Redwoods", "Stream", "Cool"],
+                        description: "Oakland's hidden redwood forest",
+                        link: "https://www.google.com/maps/search/Redwood+Regional+Park+Oakland"
+                    }
+                ],
+                perfume: [
+                    {
+                        name: "Chanel Coco Mademoiselle",
+                        brand: "Chanel",
+                        scent_family: ["Oriental", "Fresh"],
+                        price_range: "$108-180",
+                        description: "Modern classic with orange and patchouli",
+                        where_to_buy: "Nordstrom, Chanel",
+                        link: "https://www.google.com/search?q=Chanel+Coco+Mademoiselle+buy"
+                    },
+                    {
+                        name: "Replica Beach Walk",
+                        brand: "Maison Margiela",
+                        scent_family: ["Fresh", "Solar"],
+                        price_range: "$82-146",
+                        description: "Sun-warmed skin and beach memories",
+                        where_to_buy: "Sephora, online",
+                        link: "https://www.google.com/search?q=Maison+Margiela+Beach+Walk+buy"
+                    },
+                    {
+                        name: "Glossier You",
+                        brand: "Glossier",
+                        scent_family: ["Musky", "Clean"],
+                        price_range: "$64-78",
+                        description: "Personal scent that adapts to your skin",
+                        where_to_buy: "Glossier, Sephora",
+                        link: "https://www.google.com/search?q=Glossier+You+perfume+buy"
+                    }
+                ]
+            },
+            9: { // September
+                entertainment: [
+                    {
+                        title: "Sex Education",
+                        description: "Coming-of-age comedy-drama about relationships",
+                        rating: 8.3,
+                        type: "tv",
+                        link: "https://www.google.com/search?q=Sex+Education+Netflix+watch"
+                    },
+                    {
+                        title: "The Great British Baking Show",
+                        description: "Wholesome baking competition",
+                        rating: 9.0,
+                        type: "tv",
+                        link: "https://www.google.com/search?q=Great+British+Baking+Show+Netflix"
+                    },
+                    {
+                        title: "Chef's Table",
+                        description: "Beautiful documentary series about renowned chefs",
+                        rating: 8.5,
+                        type: "tv",
+                        link: "https://www.google.com/search?q=Chef's+Table+Netflix+watch"
+                    }
+                ],
+                book: [
+                    {
+                        title: "The Midnight Library",
+                        author: "Matt Haig",
+                        description: "Philosophy wrapped in an engaging story",
+                        rating: 4.2,
+                        link: "https://www.amazon.com/s?k=Midnight+Library+Matt+Haig"
+                    },
+                    {
+                        title: "Atomic Habits",
+                        author: "James Clear",
+                        description: "Tiny changes that create remarkable results",
+                        rating: 4.6,
+                        link: "https://www.amazon.com/s?k=Atomic+Habits+James+Clear"
+                    },
+                    {
+                        title: "The Seven Husbands of Evelyn Hugo",
+                        author: "Taylor Jenkins Reid",
+                        description: "Old Hollywood glamour and secrets",
+                        rating: 4.5,
+                        link: "https://www.amazon.com/s?k=Seven+Husbands+Evelyn+Hugo"
+                    }
+                ],
+                podcast: [
+                    {
+                        title: "NPR's How I Built This",
+                        creator: "Guy Raz",
+                        description: "Stories behind successful companies",
+                        link: "https://podcasts.apple.com/us/podcast/how-i-built-this-with-guy-raz/id1150510297"
+                    },
+                    {
+                        title: "Calm Stories",
+                        creator: "Calm",
+                        description: "Sleep stories for relaxation",
+                        link: "https://podcasts.apple.com/us/podcast/sleep-stories-calm-sleep-stories/id1447706025"
+                    },
+                    {
+                        title: "The Positive Psychology Podcast",
+                        creator: "Kristen Truempy",
+                        description: "Science of happiness and wellbeing",
+                        link: "https://podcasts.apple.com/us/podcast/the-positive-psychology-podcast/id1181068663"
+                    }
+                ],
+                wine: [
+                    {
+                        name: "Cabernet Sauvignon Reserve - Charles Shaw",
+                        type: "Cabernet Sauvignon",
+                        region: "California",
+                        price_range: "$3-5",
+                        description: "Trader Joe's famous Two Buck Chuck",
+                        where_to_buy: "Trader Joe's only",
+                        link: "https://www.google.com/search?q=Charles+Shaw+Cabernet+Trader+Joes"
+                    },
+                    {
+                        name: "Gnarly Head Old Vine Zinfandel",
+                        type: "Zinfandel",
+                        region: "California",
+                        price_range: "$8-12",
+                        description: "Bold Zin from old vines",
+                        where_to_buy: "Most grocery stores",
+                        link: "https://www.google.com/search?q=Gnarly+Head+Old+Vine+Zinfandel+buy"
+                    },
+                    {
+                        name: "Francis Coppola Diamond Collection Merlot",
+                        type: "Merlot",
+                        region: "California",
+                        price_range: "$15-22",
+                        description: "Smooth Merlot from legendary director",
+                        where_to_buy: "BevMo, Total Wine",
+                        link: "https://www.google.com/search?q=Francis+Coppola+Diamond+Merlot+buy"
+                    }
+                ],
+                hiking: [
+                    {
+                        name: "Muir Woods National Monument",
+                        location: "Mill Valley, CA",
+                        distance: "2 miles",
+                        elevation: "100 ft",
+                        difficulty: "Easy",
+                        features: ["Old growth redwoods", "Iconic", "Tourist"],
+                        description: "Famous old-growth redwood forest",
+                        link: "https://www.google.com/maps/search/Muir+Woods+National+Monument"
+                    },
+                    {
+                        name: "Tilden Regional Park",
+                        location: "Berkeley, CA",
+                        distance: "4 miles",
+                        elevation: "300 ft",
+                        difficulty: "Moderate",
+                        features: ["Bay views", "Botanical garden", "Steam train"],
+                        description: "Berkeley hills with amazing views",
+                        link: "https://www.google.com/maps/search/Tilden+Regional+Park+Berkeley"
+                    },
+                    {
+                        name: "Point Reyes National Seashore",
+                        location: "Point Reyes, CA",
+                        distance: "6 miles",
+                        elevation: "200 ft",
+                        difficulty: "Moderate",
+                        features: ["Ocean", "Lighthouse", "Wildlife"],
+                        description: "Dramatic coastline and historic lighthouse",
+                        link: "https://www.google.com/maps/search/Point+Reyes+National+Seashore"
+                    }
+                ],
+                perfume: [
+                    {
+                        name: "Versace Dylan Blue Pour Femme",
+                        brand: "Versace",
+                        scent_family: ["Fruity", "Floral"],
+                        price_range: "$68-95",
+                        description: "Modern fruity-floral with blackcurrant",
+                        where_to_buy: "Macy's, Ulta",
+                        link: "https://www.google.com/search?q=Versace+Dylan+Blue+Pour+Femme+buy"
+                    },
+                    {
+                        name: "Kilian Love Don't Be Shy",
+                        brand: "Kilian",
+                        scent_family: ["Gourmand", "Floral"],
+                        price_range: "$165-295",
+                        description: "Sweet peach and marshmallow blend",
+                        where_to_buy: "Sephora, Nordstrom",
+                        link: "https://www.google.com/search?q=Kilian+Love+Don't+Be+Shy+buy"
+                    },
+                    {
+                        name: "Viktor & Rolf Flowerbomb",
+                        brand: "Viktor & Rolf",
+                        scent_family: ["Floral", "Oriental"],
+                        price_range: "$92-165",
+                        description: "Explosive bouquet of flowers",
+                        where_to_buy: "Sephora, Macy's",
+                        link: "https://www.google.com/search?q=Viktor+Rolf+Flowerbomb+buy"
+                    }
+                ]
+            },
+            11: { // November
+                entertainment: [
+                    {
+                        title: "Anne with an E",
+                        description: "Beautiful adaptation of Anne of Green Gables",
+                        rating: 8.7,
+                        type: "tv",
+                        link: "https://www.google.com/search?q=Anne+with+an+E+Netflix+watch"
+                    },
+                    {
+                        title: "The Good Witch",
+                        description: "Feel-good series about magic and community",
+                        rating: 7.3,
+                        type: "tv",
+                        link: "https://www.google.com/search?q=Good+Witch+Hallmark+watch"
+                    },
+                    {
+                        title: "You've Got Mail",
+                        description: "Classic romantic comedy about connection",
+                        rating: 6.7,
+                        type: "movie",
+                        link: "https://www.google.com/search?q=You've+Got+Mail+movie+stream"
+                    }
+                ],
+                book: [
+                    {
+                        title: "The Four Agreements",
+                        author: "Don Miguel Ruiz",
+                        description: "Ancient Toltec wisdom for personal freedom",
+                        rating: 4.3,
+                        link: "https://www.amazon.com/s?k=Four+Agreements+Don+Miguel+Ruiz"
+                    },
+                    {
+                        title: "Gratitude Journal",
+                        author: "Various",
+                        description: "Practice gratitude with guided prompts",
+                        rating: 4.4,
+                        link: "https://www.amazon.com/s?k=gratitude+journal+daily"
+                    },
+                    {
+                        title: "The Miracle Morning",
+                        author: "Hal Elrod",
+                        description: "Transform your life with morning rituals",
+                        rating: 4.2,
+                        link: "https://www.amazon.com/s?k=Miracle+Morning+Hal+Elrod"
+                    }
+                ],
+                podcast: [
+                    {
+                        title: "Gratitude & Trust",
+                        creator: "Paul Williams & Tracey Jackson",
+                        description: "Six affirmations that will change your life",
+                        link: "https://podcasts.apple.com/us/podcast/gratitude-trust/id1068160001"
+                    },
+                    {
+                        title: "The Tim Ferriss Show",
+                        creator: "Tim Ferriss",
+                        description: "Deconstructing world-class performers",
+                        link: "https://podcasts.apple.com/us/podcast/the-tim-ferriss-show/id863897795"
+                    },
+                    {
+                        title: "Meditation for Sleep",
+                        creator: "Meditation for Sleep",
+                        description: "Guided meditations for better sleep",
+                        link: "https://podcasts.apple.com/us/podcast/meditation-for-sleep/id1384991893"
+                    }
+                ],
+                wine: [
+                    {
+                        name: "Thanksgiving Red Blend",
+                        type: "Red Blend",
+                        region: "California",
+                        price_range: "$15-25",
+                        description: "Perfect for holiday gatherings",
+                        where_to_buy: "Seasonal selections at wine shops",
+                        link: "https://www.google.com/search?q=Thanksgiving+red+wine+blend+buy"
+                    },
+                    {
+                        name: "Rodney Strong Cabernet Sauvignon",
+                        type: "Cabernet Sauvignon",
+                        region: "Sonoma County",
+                        price_range: "$18-28",
+                        description: "Food-friendly Sonoma Cabernet",
+                        where_to_buy: "Total Wine, Whole Foods",
+                        link: "https://www.google.com/search?q=Rodney+Strong+Cabernet+buy"
+                    },
+                    {
+                        name: "Clos du Bois Merlot",
+                        type: "Merlot",
+                        region: "Sonoma County",
+                        price_range: "$12-18",
+                        description: "Smooth Sonoma Merlot",
+                        where_to_buy: "Most grocery stores",
+                        link: "https://www.google.com/search?q=Clos+du+Bois+Merlot+buy"
+                    }
+                ],
+                hiking: [
+                    {
+                        name: "Thanksgiving Fall Colors Trail",
+                        location: "Various Bay Area locations",
+                        distance: "3-5 miles",
+                        elevation: "200 ft",
+                        difficulty: "Easy-Moderate",
+                        features: ["Fall colors", "Seasonal", "Gratitude"],
+                        description: "Enjoy autumn colors while reflecting on gratitude",
+                        link: "https://www.google.com/search?q=fall+colors+hiking+bay+area"
+                    },
+                    {
+                        name: "Shoreline Lake Park",
+                        location: "Mountain View, CA",
+                        distance: "2 miles",
+                        elevation: "Flat",
+                        difficulty: "Easy",
+                        features: ["Lake", "Flat", "Family-friendly"],
+                        description: "Easy lakeside walk perfect for family time",
+                        link: "https://www.google.com/maps/search/Shoreline+Lake+Park+Mountain+View"
+                    },
+                    {
+                        name: "Almaden Lake Park",
+                        location: "San Jose, CA",
+                        distance: "3 miles",
+                        elevation: "50 ft",
+                        difficulty: "Easy",
+                        features: ["Lake", "Peaceful", "Wildlife"],
+                        description: "Calm lake setting for reflection",
+                        link: "https://www.google.com/maps/search/Almaden+Lake+Park+San+Jose"
+                    }
+                ],
+                perfume: [
+                    {
+                        name: "Bath & Body Works Warm Vanilla Sugar",
+                        brand: "Bath & Body Works",
+                        scent_family: ["Gourmand", "Warm"],
+                        price_range: "$12-25",
+                        description: "Cozy vanilla perfect for fall",
+                        where_to_buy: "Bath & Body Works",
+                        link: "https://www.google.com/search?q=Bath+Body+Works+Warm+Vanilla+Sugar"
+                    },
+                    {
+                        name: "Maison Margiela By the Fireplace",
+                        brand: "Maison Margiela",
+                        scent_family: ["Woody", "Warm"],
+                        price_range: "$82-146",
+                        description: "Cozy fireplace with chestnuts and smoke",
+                        where_to_buy: "Sephora, online",
+                        link: "https://www.google.com/search?q=Maison+Margiela+By+the+Fireplace+buy"
+                    },
+                    {
+                        name: "Jo Malone Pine & Eucalyptus",
+                        brand: "Jo Malone",
+                        scent_family: ["Woody", "Fresh"],
+                        price_range: "$68-134",
+                        description: "Winter forest blend",
+                        where_to_buy: "Jo Malone, Nordstrom",
+                        link: "https://www.google.com/search?q=Jo+Malone+Pine+Eucalyptus+buy"
+                    }
+                ]
+            },
+            12: { // December
+                entertainment: [
+                    {
+                        title: "The Holiday Movies",
+                        description: "Cozy Christmas and holiday films",
+                        rating: 7.5,
+                        type: "movie",
+                        link: "https://www.google.com/search?q=best+holiday+Christmas+movies+Netflix"
+                    },
+                    {
+                        title: "The Great British Baking Show: Holidays",
+                        description: "Holiday baking specials",
+                        rating: 9.0,
+                        type: "tv",
+                        link: "https://www.google.com/search?q=Great+British+Baking+Show+Holiday+Netflix"
+                    },
+                    {
+                        title: "Love Actually",
+                        description: "Interconnected love stories during Christmas",
+                        rating: 7.6,
+                        type: "movie",
+                        link: "https://www.google.com/search?q=Love+Actually+movie+stream"
+                    }
+                ],
+                book: [
+                    {
+                        title: "A Year of Living Danishly",
+                        author: "Helen Russell",
+                        description: "Hygge and the happiness of Denmark",
+                        rating: 4.0,
+                        link: "https://www.amazon.com/s?k=Year+Living+Danishly+Helen+Russell"
+                    },
+                    {
+                        title: "The Little Book of Hygge",
+                        author: "Meik Wiking",
+                        description: "Danish secrets to happy living",
+                        rating: 4.1,
+                        link: "https://www.amazon.com/s?k=Little+Book+Hygge+Meik+Wiking"
+                    },
+                    {
+                        title: "Year-End Reflection Journal",
+                        author: "Various",
+                        description: "Guided prompts for reviewing the year",
+                        rating: 4.3,
+                        link: "https://www.amazon.com/s?k=year+end+reflection+journal"
+                    }
+                ],
+                podcast: [
+                    {
+                        title: "Holiday Meditation",
+                        creator: "Various",
+                        description: "Peaceful meditations for the holiday season",
+                        link: "https://podcasts.apple.com/search?term=holiday+meditation"
+                    },
+                    {
+                        title: "The Minimalists",
+                        creator: "Joshua Fields Millburn & Ryan Nicodemus",
+                        description: "Living meaningfully with less",
+                        link: "https://podcasts.apple.com/us/podcast/the-minimalists-podcast/id1056839971"
+                    },
+                    {
+                        title: "Sleep Stories for Winter",
+                        creator: "Various",
+                        description: "Cozy bedtime stories for long nights",
+                        link: "https://podcasts.apple.com/search?term=winter+sleep+stories"
+                    }
+                ],
+                wine: [
+                    {
+                        name: "Holiday Spiced Wine",
+                        type: "Mulled Wine Mix",
+                        region: "Various",
+                        price_range: "$8-15",
+                        description: "Warm spiced wine perfect for cold nights",
+                        where_to_buy: "Trader Joe's seasonal section",
+                        link: "https://www.google.com/search?q=mulled+wine+spice+kit+buy"
+                    },
+                    {
+                        name: "Prosecco for Celebrations",
+                        type: "Sparkling",
+                        region: "Italy",
+                        price_range: "$10-20",
+                        description: "Festive bubbles for New Year's toasts",
+                        where_to_buy: "All wine shops",
+                        link: "https://www.google.com/search?q=prosecco+sparkling+wine+buy"
+                    },
+                    {
+                        name: "Kendall-Jackson Vintner's Reserve Cabernet",
+                        type: "Cabernet Sauvignon",
+                        region: "California",
+                        price_range: "$20-30",
+                        description: "Premium Cabernet for holiday dinners",
+                        where_to_buy: "Costco, Total Wine",
+                        link: "https://www.google.com/search?q=Kendall+Jackson+Cabernet+buy"
+                    }
+                ],
+                hiking: [
+                    {
+                        name: "Winter Solstice Hike",
+                        location: "Various Bay Area peaks",
+                        distance: "4-6 miles",
+                        elevation: "300-500 ft",
+                        difficulty: "Moderate",
+                        features: ["Winter light", "Reflection", "Solstice"],
+                        description: "Celebrate the longest night and returning light",
+                        link: "https://www.google.com/search?q=winter+solstice+hikes+bay+area"
+                    },
+                    {
+                        name: "Christmas Tree Farm Walks",
+                        location: "Santa Cruz Mountains",
+                        distance: "2-3 miles",
+                        elevation: "100 ft",
+                        difficulty: "Easy",
+                        features: ["Christmas trees", "Family", "Holiday"],
+                        description: "Festive walks through Christmas tree farms",
+                        link: "https://www.google.com/search?q=Christmas+tree+farms+Santa+Cruz+Mountains"
+                    },
+                    {
+                        name: "Peaceful Winter Walks",
+                        location: "Local parks",
+                        distance: "1-3 miles",
+                        elevation: "Minimal",
+                        difficulty: "Easy",
+                        features: ["Peaceful", "Reflection", "Nearby"],
+                        description: "Quiet winter walks for holiday reflection",
+                        link: "https://www.google.com/search?q=peaceful+winter+walks+bay+area"
+                    }
+                ],
+                perfume: [
+                    {
+                        name: "Jo Malone Pomegranate Noir",
+                        brand: "Jo Malone",
+                        scent_family: ["Fruity", "Spicy"],
+                        price_range: "$68-134",
+                        description: "Rich pomegranate with spicy woods",
+                        where_to_buy: "Jo Malone, Sephora",
+                        link: "https://www.google.com/search?q=Jo+Malone+Pomegranate+Noir+buy"
+                    },
+                    {
+                        name: "Bath & Body Works Winter Candy Apple",
+                        brand: "Bath & Body Works",
+                        scent_family: ["Fruity", "Sweet"],
+                        price_range: "$12-25",
+                        description: "Sweet holiday apple scent",
+                        where_to_buy: "Bath & Body Works",
+                        link: "https://www.google.com/search?q=Bath+Body+Works+Winter+Candy+Apple"
+                    },
+                    {
+                        name: "Tom Ford Lost Cherry",
+                        brand: "Tom Ford",
+                        scent_family: ["Fruity", "Gourmand"],
+                        price_range: "$230-350",
+                        description: "Luxurious cherry and almond blend",
+                        where_to_buy: "Nordstrom, Sephora",
+                        link: "https://www.google.com/search?q=Tom+Ford+Lost+Cherry+buy"
+                    }
+                ]
+            }
+        };
+
+        // Current recommendations and month
+        let currentMonth = new Date().getMonth() + 1; // 1-12
+        let currentPack = {};
+        let currentRecommendations = {};
+        let currentIndices = {
+            entertainment: 0,
+            book: 0,
+            podcast: 0,
+            wine: 0,
+            hiking: 0,
+            perfume: 0
+        };
+
+        function getMonthName(monthNum) {
+            const months = [
+                "January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"
+            ];
+            return months[monthNum - 1];
+        }
+
+        function getCurrentPack() {
+            // Use October pack if current month's pack doesn't exist
+            return monthlyPacks[currentMonth] || monthlyPacks[10];
+        }
+
+        function formatContent(item, category) {
+            let content = '<div style="padding: 15px; border-left: 3px solid #764ba2; margin-bottom: 10px;">';
+            
+            if (category === 'entertainment') {
+                content += `
+                    <h4>${item.title || 'N/A'}</h4>
+                    <p><span class="rating">⭐ ${item.rating || 'N/A'}</span> • ${(item.type || '').charAt(0).toUpperCase() + (item.type || '').slice(1)}</p>
+                    <p>${item.description || ''}</p>
+                    ${item.link ? `<a href="${item.link}" target="_blank" class="link-btn">🔗 Watch This</a>` : ''}
+                `;
+            } else if (category === 'book') {
+                content += `
+                    <h4>${item.title || 'N/A'}</h4>
+                    <p>by ${item.author || 'Unknown'}</p>
+                    <p><span class="rating">⭐ ${item.rating || 'N/A'}</span></p>
+                    <p>${item.description || ''}</p>
+                    ${item.link ? `<a href="${item.link}" target="_blank" class="link-btn">🔗 Buy Book</a>` : ''}
+                `;
+            } else if (category === 'podcast') {
+                content += `
+                    <h4>${item.title || 'N/A'}</h4>
+                    <p>by ${item.creator || 'Unknown'}</p>
+                    <p>${item.description || ''}</p>
+                    ${item.link ? `<a href="${item.link}" target="_blank" class="link-btn">🔗 Listen Now</a>` : ''}
+                `;
+            } else if (category === 'wine') {
+                content += `
+                    <h4>${item.name || 'N/A'}</h4>
+                    <p><span class="tag">${item.type || ''}</span> <span class="tag">${item.region || ''}</span></p>
+                    <p><span class="price">${item.price_range || ''}</span></p>
+                    <p>${item.description || ''}</p>
+                    <p><strong>Where to buy:</strong> ${item.where_to_buy || ''}</p>
+                    ${item.link ? `<a href="${item.link}" target="_blank" class="link-btn">🔗 Buy Wine</a>` : ''}
+                `;
+            } else if (category === 'hiking') {
+                let features = item.features || [];
+                let featureTags = features.map(f => `<span class="tag">${f}</span>`).join('');
+                content += `
+                    <h4>${item.name || 'N/A'}</h4>
+                    <p>${item.location || ''}</p>
+                    <p><strong>${item.distance || ''}</strong> • <strong>${item.elevation || ''}</strong> • ${item.difficulty || ''}</p>
+                    <p>${featureTags}</p>
+                    <p>${item.description || ''}</p>
+                    ${item.link ? `<a href="${item.link}" target="_blank" class="link-btn">🔗 Get Directions</a>` : ''}
+                `;
+            } else if (category === 'perfume') {
+                let scentTags = (item.scent_family || []).map(s => `<span class="tag">${s}</span>`).join('');
+                content += `
+                    <h4>${item.name || 'N/A'}</h4>
+                    <p>${item.brand || ''}</p>
+                    <p>${scentTags}</p>
+                    <p><span class="price">${item.price_range || ''}</span></p>
+                    <p>${item.description || ''}</p>
+                    <p><strong>Where to buy:</strong> ${item.where_to_buy || ''}</p>
+                    ${item.link ? `<a href="${item.link}" target="_blank" class="link-btn">🔗 Buy Perfume</a>` : ''}
+                `;
+            }
+            
+            content += '</div>';
+            return content;
+        }
+
+        function updateCard(category, content) {
+            const cardBody = document.querySelector(`[data-category="${category}"] .card-body`);
+            if (cardBody) {
+                cardBody.innerHTML = content;
+            }
+        }
+
+        function refreshCategory(category) {
+            const button = document.querySelector(`[data-category="${category}"] .refresh-btn`);
+            const originalText = button.textContent;
+            button.textContent = '🔄 Loading...';
+            button.disabled = true;
+            
+            setTimeout(() => {
+                const options = currentPack[category] || [];
+                if (options.length > 0) {
+                    // Move to next option in this month's pack
+                    currentIndices[category] = (currentIndices[category] + 1) % options.length;
+                    const newRecommendation = options[currentIndices[category]];
+                    currentRecommendations[category] = newRecommendation;
+                    updateCard(category, formatContent(newRecommendation, category));
+                }
+                
+                button.textContent = originalText;
+                button.disabled = false;
+            }, 500);
+        }
+
+        function getMoreOptions(category) {
+            const button = document.querySelector(`[data-category="${category}"] .more-btn`);
+            const originalText = button.textContent;
+            button.textContent = '⏳ Loading...';
+            button.disabled = true;
+            
+            setTimeout(() => {
+                const options = currentPack[category] || [];
+                if (options.length > 0) {
+                    let content = '';
+                    options.forEach((item, index) => {
+                        if (index > 0) content += '<hr style="margin: 15px 0; border: 1px solid #ecf0f1;">';
+                        content += formatContent(item, category);
+                    });
+                    updateCard(category, content);
+                }
+                
+                button.textContent = originalText;
+                button.disabled = false;
+            }, 500);
+        }
+
+        function generateCards() {
+            currentPack = getCurrentPack();
+            const container = document.getElementById('recommendations');
+            const categories = [
+                {title: "📺 Entertainment", key: "entertainment"},
+                {title: "📚 Book", key: "book"},
+                {title: "🎧 Podcast", key: "podcast"},
+                {title: "🍷 Wine", key: "wine"},
+                {title: "🥾 Hiking", key: "hiking"},
+                {title: "🌸 Perfume", key: "perfume"}
+            ];
+
+            categories.forEach(cat => {
+                const options = currentPack[cat.key] || [];
+                const recommendation = options[0]; // Start with first option
+                currentRecommendations[cat.key] = recommendation;
+                currentIndices[cat.key] = 0;
+                
+                const cardHTML = `
+                    <div class="card" data-category="${cat.key}">
+                        <div class="card-header">
+                            <h3>${cat.title}</h3>
+                            <div class="card-buttons">
+                                <button class="refresh-btn" onclick="refreshCategory('${cat.key}')">🔄 Refresh</button>
+                                <button class="more-btn" onclick="getMoreOptions('${cat.key}')">📋 ${options.length} Options</button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            ${formatContent(recommendation, cat.key)}
+                        </div>
+                    </div>
+                `;
+                
+                container.innerHTML += cardHTML;
+            });
+        }
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set current date
+            const now = new Date();
+            document.getElementById('current-date').textContent = now.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            
+            // Set month indicator
+            document.getElementById('month-indicator').textContent = `${getMonthName(currentMonth)} ${now.getFullYear()} Pack`;
+            
+            // Generate recommendation cards
+            generateCards();
+        });
+    </script>
+</body>
+</html>

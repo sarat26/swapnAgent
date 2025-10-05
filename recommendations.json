@@ -1,0 +1,61 @@
+{
+  "date_generated": "2025-10-01T22:15:13.440570",
+  "month_year": "October 2025",
+  "pack_type": "monthly",
+  "recommendations": {
+    "entertainment": {
+      "title": "The Good Place",
+      "description": "A comedy-drama about ethics and personal growth",
+      "rating": 8.2,
+      "poster": "",
+      "type": "tv"
+    },
+    "book": {
+      "title": "The Power of Now",
+      "author": "Eckhart Tolle",
+      "description": "A spiritual guide to enlightenment and living in the present moment",
+      "rating": 4.5,
+      "thumbnail": "",
+      "link": ""
+    },
+    "podcast": {
+      "title": "Mindfulness For Beginners",
+      "creator": "Shaun Donaghy",
+      "description": "Podcast focused on mindfulness",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Podcasts125/v4/0d/e6/07/0de6072b-db22-145e-e254-f9bf68a05d59/mza_296207145713655397.jpg/600x600bb.jpg",
+      "link": "https://podcasts.apple.com/us/podcast/mindfulness-for-beginners/id1493806566?uo=4"
+    },
+    "wine": {
+      "name": "Columbia Crest Grand Estates Syrah",
+      "type": "Syrah",
+      "region": "Washington",
+      "price_range": "$10-15",
+      "description": "Bold Syrah with spice and dark berry flavors",
+      "where_to_buy": "Most grocery stores"
+    },
+    "hiking": {
+      "name": "Rancho San Antonio Preserve",
+      "location": "Cupertino, CA",
+      "distance": "6 miles",
+      "elevation": "200 ft",
+      "difficulty": "Moderate",
+      "features": [
+        "Close to home",
+        "Wildlife",
+        "Open space"
+      ],
+      "description": "Local favorite with rolling hills and farm animals"
+    },
+    "perfume": {
+      "name": "The Body Shop White Musk",
+      "brand": "The Body Shop",
+      "scent_family": [
+        "Woody",
+        "Floral"
+      ],
+      "price_range": "$20-35",
+      "description": "Clean, warm musk with subtle floral undertones",
+      "where_to_buy": "The Body Shop, Ulta"
+    }
+  }
+}

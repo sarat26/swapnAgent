@@ -1,0 +1,120 @@
+{
+  "basicInfo": {
+    "name": "Swapna (Mom)",
+    "age": 45,
+    "ethnicity": "Indian (Marathi)",
+    "location": "Cupertino, California",
+    "timezone": "America/Los_Angeles",
+    "family": "Married, with two children",
+    "occupation": "HR professional",
+    "lifestyleInterests": [
+      "Yoga",
+      "Meditation",
+      "Hiking",
+      "Dancing",
+      "Singing",
+      "Spending time with family"
+    ]
+  },
+  "perfume": {
+    "favoriteBrand": "Jo Malone",
+    "favoriteScents": [
+      "English Pear & Freesia",
+      "Pomegranate Noir",
+      "English Pear & Sweet Pea",
+      "Velvet Rose & Oud",
+      "Oud & Bergamot"
+    ],
+    "generalScentProfile": [
+      "Warm",
+      "Woody",
+      "Slightly floral"
+    ],
+    "preferences": {
+      "luxuryRangeUSD": [
+        150,
+        200
+      ],
+      "affordableRangeUSD": [
+        0,
+        50
+      ],
+      "openToOtherBrands": true
+    }
+  },
+  "wine": {
+    "favoriteTypes": [
+      "Malbec",
+      "Cabernet Sauvignon",
+      "Syrah",
+      "Zinfandel",
+      "Petite Sirah"
+    ],
+    "dislikes": [
+      "White wines",
+      "Ros\u00e9s"
+    ],
+    "budget": "Flexible (everyday bottles to special-occasion wines)"
+  },
+  "tvMovies": {
+    "favoriteShows": [
+      "Virgin River",
+      "Emily in Paris",
+      "The Crown",
+      "Fauda"
+    ],
+    "otherPreferences": [
+      "Comedy Bollywood movies",
+      "Drama",
+      "Character-driven stories",
+      "Lighthearted romance"
+    ]
+  },
+  "books": {
+    "favorites": [
+      "Becoming \u2014 Michelle Obama",
+      "The Checklist Manifesto \u2014 Atul Gawande",
+      "The Law of Success \u2014 Paramahansa Yogananda",
+      "The Bhagavad Gita \u2014 Eknath Easwaran",
+      "The Kite Runner \u2014 Khaled Hosseini"
+    ],
+    "generalThemes": [
+      "Memoir",
+      "Reflective",
+      "Inspirational",
+      "Spiritual growth",
+      "Cultural stories",
+      "Family-centered stories"
+    ]
+  },
+  "podcasts": {
+    "preferredThemes": [
+      "Reflection",
+      "Mindfulness",
+      "Self-growth",
+      "Motherhood",
+      "Family",
+      "Parenting",
+      "Yoga",
+      "Meditation",
+      "Hiking",
+      "Wellness",
+      "Nature",
+      "Cultural storytelling",
+      "Inspirational"
+    ]
+  },
+  "hiking": {
+    "difficulty": "Moderate",
+    "maxDistanceKm": 12,
+    "maxElevationM": 400,
+    "location": "Cupertino, CA (Bay Area trails preferred)",
+    "preferences": [
+      "Scenic",
+      "Forests",
+      "Views",
+      "Water features",
+      "Not overly strenuous"
+    ]
+  }
+}

@@ -1,0 +1,237 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monthly Pack - October 2025</title>
+    <style>
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .header h1 {
+            color: #2c3e50;
+            margin: 0;
+            font-size: 2.5em;
+        }
+        .header p {
+            color: #7f8c8d;
+            font-size: 1.2em;
+            margin: 10px 0 0 0;
+        }
+        .recommendations {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+        }
+        .card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        .card-header {
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .card-header h3 {
+            margin: 0;
+            font-size: 1.3em;
+        }
+        .card-body {
+            padding: 20px;
+        }
+        .card-body h4 {
+            margin: 0 0 10px 0;
+            color: #2c3e50;
+        }
+        .card-body p {
+            color: #7f8c8d;
+            line-height: 1.6;
+            margin: 10px 0;
+        }
+        .tag {
+            display: inline-block;
+            background: #ecf0f1;
+            color: #2c3e50;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.9em;
+            margin: 5px 5px 5px 0;
+        }
+        .price {
+            color: #27ae60;
+            font-weight: bold;
+        }
+        .rating {
+            color: #f39c12;
+            font-weight: bold;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #7f8c8d;
+        }
+        .refresh-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 1.1em;
+            cursor: pointer;
+            margin: 20px 10px;
+            transition: transform 0.3s ease;
+        }
+        .refresh-button:hover {
+            transform: translateY(-2px);
+        }
+        .button-container {
+            text-align: center;
+            margin: 30px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎁 Monthly Pack</h1>
+            <p>Personalized recommendations for October 2025</p>
+            <div class="button-container">
+                <button class="refresh-button" onclick="refreshRecommendations()">🔄 Get More Options</button>
+            </div>
+        </div>
+        
+        <div class="recommendations">
+
+            <div class="card">
+                <div class="card-header">
+                    <h3>📺 Entertainment</h3>
+                </div>
+                <div class="card-body">
+                    
+                    <div style=" padding: 15px; border-left: 3px solid #667eea;">
+                        <h4>The Good Place</h4>
+                        <p><span class="rating">⭐ 8.2</span> • Tv</p>
+                        <p>A comedy-drama about ethics and personal growth</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3>📚 Book</h3>
+                </div>
+                <div class="card-body">
+                    
+                    <div style=" padding: 15px; border-left: 3px solid #764ba2;">
+                        <h4>The Power of Now</h4>
+                        <p>by Eckhart Tolle</p>
+                        <p><span class="rating">⭐ 4.5</span></p>
+                        <p>A spiritual guide to enlightenment and living in the present moment</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3>🎧 Podcast</h3>
+                </div>
+                <div class="card-body">
+                    
+                    <div style=" padding: 15px; border-left: 3px solid #764ba2;">
+                        <h4>Mindfulness For Beginners</h4>
+                        <p>by Shaun Donaghy</p>
+                        <p>Podcast focused on mindfulness</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3>🍷 Wine</h3>
+                </div>
+                <div class="card-body">
+                    
+                    <div style=" padding: 15px; border-left: 3px solid #764ba2;">
+                        <h4>Alamos Malbec</h4>
+                        <p><span class="tag">Malbec</span> <span class="tag">Argentina</span></p>
+                        <p><span class="price">$8-12</span></p>
+                        <p>Affordable everyday Malbec with ripe berry flavors</p>
+                        <p><strong>Where to buy:</strong> Most grocery stores</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3>🥾 Hiking</h3>
+                </div>
+                <div class="card-body">
+                    
+                    <div style=" padding: 15px; border-left: 3px solid #764ba2;">
+                        <h4>Pescadero Creek Park</h4>
+                        <p>Pescadero, CA</p>
+                        <p><strong>5 miles</strong> • <strong>250 ft</strong> • Moderate</p>
+                        <p><span class="tag">Redwoods</span><span class="tag">Creek</span><span class="tag">Peaceful</span></p>
+                        <p>Serene hike through towering redwoods along a gentle creek</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3>🌸 Perfume</h3>
+                </div>
+                <div class="card-body">
+                    
+                    <div style=" padding: 15px; border-left: 3px solid #764ba2;">
+                        <h4>Pacifica Indian Coconut Nectar</h4>
+                        <p>Pacifica</p>
+                        <p><span class="tag">Warm</span><span class="tag">Exotic</span></p>
+                        <p><span class="price">$22-36</span></p>
+                        <p>Warm coconut with vanilla and wood notes - tropical and cozy</p>
+                        <p><strong>Where to buy:</strong> Target, Ulta, Whole Foods</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        
+        <div class="footer">
+            <p>Generated on October 01, 2025 at 10:19 PM</p>
+            <p>💝 Made with love for Swapna</p>
+            <div class="button-container">
+                <button class="refresh-button" onclick="refreshRecommendations()">🔄 Get Different Options</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function refreshRecommendations() {
+            alert('To get new recommendations, run:\n\npython generate_pack.py --more\n\nThen refresh this page!');
+        }
+    </script>
+</body>
+</html>

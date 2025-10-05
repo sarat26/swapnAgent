@@ -1,0 +1,61 @@
+{
+  "date_generated": "2025-10-01T22:19:04.684785",
+  "month_year": "October 2025",
+  "pack_type": "refresh",
+  "recommendations": {
+    "entertainment": {
+      "title": "The Good Place",
+      "description": "A comedy-drama about ethics and personal growth",
+      "rating": 8.2,
+      "poster": "",
+      "type": "tv"
+    },
+    "book": {
+      "title": "The Power of Now",
+      "author": "Eckhart Tolle",
+      "description": "A spiritual guide to enlightenment and living in the present moment",
+      "rating": 4.5,
+      "thumbnail": "",
+      "link": ""
+    },
+    "podcast": {
+      "title": "Mindfulness For Beginners",
+      "creator": "Shaun Donaghy",
+      "description": "Podcast focused on mindfulness",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Podcasts125/v4/0d/e6/07/0de6072b-db22-145e-e254-f9bf68a05d59/mza_296207145713655397.jpg/600x600bb.jpg",
+      "link": "https://podcasts.apple.com/us/podcast/mindfulness-for-beginners/id1493806566?uo=4"
+    },
+    "wine": {
+      "name": "Alamos Malbec",
+      "type": "Malbec",
+      "region": "Argentina",
+      "price_range": "$8-12",
+      "description": "Affordable everyday Malbec with ripe berry flavors",
+      "where_to_buy": "Most grocery stores"
+    },
+    "hiking": {
+      "name": "Pescadero Creek Park",
+      "location": "Pescadero, CA",
+      "distance": "5 miles",
+      "elevation": "250 ft",
+      "difficulty": "Moderate",
+      "features": [
+        "Redwoods",
+        "Creek",
+        "Peaceful"
+      ],
+      "description": "Serene hike through towering redwoods along a gentle creek"
+    },
+    "perfume": {
+      "name": "Pacifica Indian Coconut Nectar",
+      "brand": "Pacifica",
+      "scent_family": [
+        "Warm",
+        "Exotic"
+      ],
+      "price_range": "$22-36",
+      "description": "Warm coconut with vanilla and wood notes - tropical and cozy",
+      "where_to_buy": "Target, Ulta, Whole Foods"
+    }
+  }
+}
