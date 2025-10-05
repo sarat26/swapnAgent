@@ -66,12 +66,15 @@
         }
         .card-header h3 {
             margin: 0;
-            font-size: 1.3em;
+            font-size: 1.2em;
+            flex: 1;
+            min-width: 0;
         }
         .card-buttons {
             display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
+            gap: 6px;
+            flex-wrap: nowrap;
+            flex-shrink: 0;
         }
         .card-body {
             padding: 20px;
@@ -106,13 +109,14 @@
             background: rgba(255,255,255,0.2);
             color: white;
             border: 1px solid rgba(255,255,255,0.3);
-            padding: 6px 10px;
-            border-radius: 15px;
-            font-size: 0.8em;
+            padding: 5px 8px;
+            border-radius: 12px;
+            font-size: 0.75em;
             cursor: pointer;
             transition: all 0.3s ease;
             text-decoration: none;
             display: inline-block;
+            white-space: nowrap;
         }
         .refresh-btn:hover, .more-btn:hover, .link-btn:hover {
             background: rgba(255,255,255,0.3);
